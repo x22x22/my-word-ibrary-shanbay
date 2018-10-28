@@ -31,6 +31,7 @@ const main = async () => {
     }
   });
   bodys = _.orderBy(bodys, ['content']);
+  bodys = _.uniqBy(bodys, 'content');
   let md: string = '# 单词集合\n\n|序号|单词|音标|解释|\n|---|---|---|---|\n';
   bodys = await Bluebird.each(bodys, (body, index) => {
     md += `|${index + 1}|${body.content.replace('\n', '<br>')}|/${body.pronunciation.replace(
