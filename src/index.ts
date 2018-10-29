@@ -9,17 +9,17 @@ const cookie = config.cookie;
 const timestamp = Date.now();
 const baseUrl = 'https://www.shanbay.com/api/v1/bdc/library';
 // 正在学习
-const familiarUrl = `${baseUrl}/familiar/?ipp=10000&_=${timestamp}`;
+const familiarUrl = `${baseUrl}/familiar/?ipp=50&_=${timestamp}`;
 // 新的单词
-const freshUrl = `${baseUrl}/fresh/?ipp=10000&_=${timestamp}`;
+const freshUrl = `${baseUrl}/fresh/?ipp=50&_=${timestamp}`;
 // 今日单词
-const todayUrl = `${baseUrl}/today/?ipp=10000&_=${timestamp}`;
+const todayUrl = `${baseUrl}/today/?ipp=50&_=${timestamp}`;
 // 掌握单词
-const masterUrl = `${baseUrl}/master/?ipp=10000&_=${timestamp}`;
+const masterUrl = `${baseUrl}/master/?ipp=50&_=${timestamp}`;
 // 简单词
-const resolvedUrl = `${baseUrl}/resolved/?ipp=10000&_=${timestamp}`;
+const resolvedUrl = `${baseUrl}/resolved/?ipp=50&_=${timestamp}`;
 // 易错词
-const hardUrl = `${baseUrl}/hard/?ipp=10000&_=${timestamp}`;
+const hardUrl = `${baseUrl}/hard/?ipp=50&_=${timestamp}`;
 
 let bodys: any[] = [];
 
@@ -28,6 +28,15 @@ const main = async () => {
     const res = await axios.get(url, { headers: { cookie }, responseType: 'json' });
     if (res.data.status_code === 0 && res.data.data.total > 0) {
       bodys = bodys.concat(res.data.data.objects);
+      const total: number = res.data.data.total;
+      const ipp: number = res.data.data.ipp;
+      const sumPage = parseInt((total / ipp).toString(), 10) + (total % ipp > 0 ? 1 : 0);
+      if (sumPage > 1) {
+        for (let index = 2; index < sumPage; index++) {
+          const nextRes = await axios.get(`${url}&page=${index}`, { headers: { cookie }, responseType: 'json' });
+          bodys = bodys.concat(nextRes.data.data.objects);
+        }
+      }
     }
   });
   bodys = _.orderBy(bodys, ['content']);
