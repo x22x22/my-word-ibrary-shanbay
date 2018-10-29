@@ -37,6 +37,8 @@ const main = async () => {
           bodys = bodys.concat(nextRes.data.data.objects);
         }
       }
+    } else {
+      console.error('请求错误: ', `url: ${url}; res.data: ${res.data}`);
     }
   });
   bodys = _.orderBy(bodys, ['content']);
