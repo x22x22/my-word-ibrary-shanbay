@@ -10,7 +10,7 @@
     "@types/lodash": "^4.14.117",
     "axios": "^0.18.1",
     "bluebird": "^3.5.2",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.3"
   },
